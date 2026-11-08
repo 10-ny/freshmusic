@@ -3,16 +3,14 @@
   import Button from '#lib/components/Button.svelte';
   import Input from '#lib/components/Input.svelte';
   import Badge from '#lib/components/Badge.svelte';
+  import { words } from '#lib/data/wordlist';
 
   const USER_ID_KEY = 'rotation-user-id';
-  const ID_CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
 
-  function block() {
-    return Array.from({ length: 4 }, () => ID_CHARS[Math.floor(Math.random() * ID_CHARS.length)]).join('');
-  }
-
-  function generate() {
-    return `RT-${block()}-${block()}`;
+  function generate(): string {
+    const buf = new Uint32Array(2);
+    crypto.getRandomValues(buf);
+    return `${words[buf[0] % words.length]}-${words[buf[1] % words.length]}`;
   }
 
   let userId = $state('');
@@ -77,7 +75,7 @@
         <form onsubmit={onSubmit} class="flex flex-col gap-4">
           <Input
             label="User ID"
-            placeholder="e.g. RT-7K2P-QX9M"
+            placeholder="e.g. river-desk"
             bind:value={userId}
             oninput={onInput}
             autocomplete="username"
