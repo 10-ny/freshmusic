@@ -1,0 +1,30 @@
+// ~512 common, unambiguous English words for user ID generation.
+// Two words drawn from this list gives 512² = 262,144 combinations —
+// sufficient for a prototype; collision-checking moves server-side once the DB is wired up.
+export const words = [
+  'able','acid','aged','also','area','army','away',
+  'baby','back','ball','band','bank','base','bath','bear','beat','been','belt','best','bird','blow','blue','boat','body','bold','bone','book','boom','born','both','bowl','burn','bush',
+  'cafe','cage','cake','call','calm','camp','card','care','cart','cave','cell','chat','chef','chip','city','clam','clap','clay','clip','club','coal','coat','coil','coin','cold','comb','cook','cool','cope','cord','corn','cost','cozy','crab','crew','crop','cube','cure','curl',
+  'dark','dart','dash','data','date','dawn','days','dead','deal','dean','dear','deck','deep','deer','dell','demo','desk','dial','diet','dirt','disk','dive','dock','door','dose','dove','down','draw','drip','drop','drum','duck','duel','dune','dust',
+  'each','earl','earn','ease','east','edge','emit','epic',
+  'face','fact','fair','fall','fame','farm','fast','fate','feel','feet','fell','felt','fern','fest','fill','film','find','fire','firm','fish','fist','flag','flat','flew','flip','flow','foam','fold','folk','fond','font','food','foot','ford','fore','fork','fort','frog','fuel','full','fund',
+  'gain','gale','game','gear','gene','gift','girl','give','glad','glow','glue','goal','gold','gone','good','gown','grab','gray','grid','grin','grip','grow','gulf','gust',
+  'half','hall','halt','hand','hang','hard','hare','harp','hart','hash','haze','head','heal','heap','heat','heel','helm','help','herb','herd','hero','hide','high','hill','hint','hole','home','hood','hook','hope','horn','host','huge','hump','hunt',
+  'idea','idle','iris','iron',
+  'jade','jail','jazz','jest','join','joke','jolt','jump','just',
+  'keen','keep','kelp','kern','kick','kind','king','knit','knob','knot',
+  'lace','lack','lake','lamp','land','lane','lark','lash','last','late','lawn','lead','leaf','lean','leap','left','lend','lens','lift','lime','line','link','lion','list','live','load','loam','lock','loft','lone','long','loom','loop','lore','lush',
+  'made','mail','main','make','mane','many','mare','mark','mars','mask','mast','mate','maze','meal','mean','meet','melt','memo','mesh','mild','mile','milk','mill','mind','mine','mint','mist','moat','mode','moon','moor','more','moss','moth','move','much','mule','muse','must',
+  'name','navy','neat','neck','need','nest','next','nice','nine','node','nook','norm','note','nova',
+  'oaks','oath','oboe','once','only','open','oral','orb','orca','oval','oven',
+  'pace','pack','page','paid','palm','park','part','past','path','pave','peak','pear','peck','peel','peer','perk','pest','pick','pier','pile','pine','pink','pipe','plan','play','plot','plow','plum','plus','poem','poet','pole','pond','pool','port','pose','post','pour','prey','prod','prop','pull','pump','pure','push',
+  'quad','quiz',
+  'race','rack','rage','rail','rain','rake','ramp','rang','rank','rare','read','real','reed','reef','reel','rely','rent','rest','rice','rich','ride','ring','rise','road','roam','roar','robe','rock','role','roll','roof','root','rope','rose','rove','ruby','ruin','rule','rush',
+  'safe','sage','sail','sale','sand','sane','sang','save','scan','seal','seed','self','send','shed','ship','shop','shot','show','side','sift','silk','silo','sing','slab','slam','slap','slim','slip','slow','snow','soak','soar','sock','soft','soil','sole','some','song','sort','soul','soup','spar','spin','spit','spot','spur','star','stay','stem','step','stir','stop','stub','such','suit','surf','swan','swap','swim',
+  'tail','tale','tall','tame','tank','tape','task','team','tear','tell','tend','term','test','text','than','that','them','then','thud','tick','tide','tier','tile','time','tips','toad','toll','tomb','tone','took','tool','tops','town','trek','trim','trio','trip','true','tune','turf','turn','tusk','twin',
+  'ulna','unit','upon','used',
+  'vale','vane','vast','veil','vent','verb','vest','view','vine','void','vole','volt','vote',
+  'wade','wage','wake','walk','wall','wand','ward','warm','warp','wary','wave','weak','weed','well','west','wide','wild','will','wind','wine','wing','wire','wise','wish','with','woad','woke','wolf','wood','wool','word','wore','work','worm','wove','wren',
+  'yard','yarn','year','yell','your',
+  'zeal','zest','zinc','zone','zoom',
+];

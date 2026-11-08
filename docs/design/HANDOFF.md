@@ -1,16 +1,18 @@
 # Rotation — build handoff
 
-Build a small web app that shows the new and recent albums of artists I follow, with a page per album.
+Build a small web app that shows the new and recent albums of artists I follow, with a page per album. Visitors start on a welcome page where they enter (or create) a user ID.
 **Stack: SvelteKit (Svelte 5, TypeScript) + Tailwind CSS v4.**
 
 This folder holds the design, not code to copy:
 
 | Path | What it is |
 | --- | --- |
+| `screens/Welcome.dc.html` | Welcome / user ID page — the first page visitors see (design source) |
 | `screens/Main.dc.html` | Hero / new-releases carousel (design source) |
 | `screens/Album.dc.html` | Album detail page (design source) |
 | `design-system/` | Tokens (`tokens.json`, `tokens.css`), the brand book (`README.md`), and component guidelines |
 | `assets/cover.jpg` | Sample cover image for the album page |
+| `assets/welcome-bg.jpg` | Black-and-white photo for the welcome page's left panel |
 
 The `.dc.html` files are design-canvas sources: read them for layout, spacing, copy and behaviour. Markup inside `<x-dc>` is the page; `{{holes}}`, `<sc-for>` and `<sc-if>` are template syntax; the `<script type="text/x-dc">` block holds the sample data and state logic. `<x-import component-from-global-scope="…Button">` means "use the design system's Button". Rebuild everything as Svelte components; do not ship `support.js`, `bundle.js` or React.
 
@@ -59,10 +61,13 @@ Read `design-system/README.md` first: it is the brand book (dark canvas, one lav
 
 | Route | Screen | Source |
 | --- | --- | --- |
-| `/` | New releases hero + carousel | `screens/Main.dc.html` |
+| `/` | Welcome: enter or create a user ID | `screens/Welcome.dc.html` |
+| `/releases` | New releases hero + carousel | `screens/Main.dc.html` |
 | `/album/[slug]` | Album detail | `screens/Album.dc.html` |
 
-A shared `+layout.svelte` holds the header.
+`/releases` and `/album/[slug]` share a layout with the header (section 3). The welcome page has its own minimal header (logo only). Links that pointed to `/` in the designs (logo, "← New releases") now go to `/releases`.
+
+Naming: the welcome page headline is **FreshMusic**; the logo wordmark in the screens still reads "Rotation". Use "FreshMusic" everywhere unless told otherwise.
 
 ## 3. Header (both pages)
 
@@ -70,7 +75,31 @@ A shared `+layout.svelte` holds the header.
 - Right: **Menu** button (secondary, hamburger icon). It opens nothing yet: render it with `aria-expanded="false"` and leave a TODO. Menu sections (all artists, others TBD) come later.
 - 1px hairline bottom border, 20px / 32px padding.
 
-## 4. Home `/` — new-releases carousel
+## 3b. Welcome `/` — user ID
+
+Full-height page, two columns that wrap (each `flex: 1 1 480px`); on narrow screens the photo panel stacks above the form.
+
+**Left: photo panel** (`aria-hidden`, decorative)
+- `assets/welcome-bg.jpg`, `object-cover`, `object-position: 50% 30%`, `grayscale(1)`, **opacity 0.3** over pure black.
+- Its right edge is a **wave**, not a line: clip the panel with
+  `<clipPath id="wave-edge" clipPathUnits="objectBoundingBox"><path d="M0,0 H1 C1,0.18 0.83,0.3 0.86,0.5 C0.89,0.7 1,0.78 1,1 H0 Z"/></clipPath>`
+  (`clip-path: url(#wave-edge)`). It is the two-ellipse wave separator turned vertical: the edge curves about 14% into the photo and swings back out lower down. No border, no gradient.
+
+**Right: form column** (black canvas)
+- Header: logo only (no Menu).
+- Centred block, max-width 400px, gap 32px:
+  1. **FreshMusic** (`t-display-md`, `clamp(32px, 5vw, 40px)`), centred, with "Enter your user ID to see new releases from the artists you follow." under it (`t-body`, ink-subtle).
+  2. Form: **User ID** input (design-system Input: label, placeholder `e.g. RT-7K2P-QX9M`, hint "The ID you got when you created your account.", `autocomplete="username"`, `spellcheck="false"`), then a full-width primary **Continue** button (44px tall, trailing chevron).
+  3. Divider: hairline — "New here?" (caption) — hairline.
+  4. **Create new user ID**: secondary button, size lg, sized to its label and **centred**.
+  5. After creating: a `role="status"` row (surface-1, hairline, 8px radius) with a success Badge "Created" and "Your new ID is filled in above. Save it — you'll need it to sign in."
+
+**Behaviour**
+- Continue submits the form: validate the ID (non-empty; format `RT-XXXX-XXXX`, letters A–Z without I/O and digits 2–9), look it up, store the session, go to `/releases`. Show an inline error under the input for an empty or unknown ID.
+- Create new user ID: generate an ID in that format on the server, save the user, fill the input with it and show the status row. (The design generates it client-side as a mock.)
+- Keep the user's ID in a cookie/session; `/releases` and `/album/*` redirect to `/` when there is none.
+
+## 4. Releases `/releases` — new-releases carousel
 
 Full-height page (`min-h-screen`), flex column: header, carousel stage, caption + controls.
 
@@ -143,11 +172,11 @@ Seed it with the six albums in the `<script>` block of `screens/Main.dc.html` (t
 
 ## 7. Not in scope yet
 
-The Menu and its sections · artist pages / discography · real data and covers · auth.
+The Menu and its sections · artist pages / discography · real data and covers · real authentication beyond the user ID (passwords, OAuth).
 
 ## 8. Done when
 
-- `/` and `/album/[slug]` match the screens at 1440px wide and still work at 390px (columns stack, controls wrap, nothing overflows).
+- `/`, `/releases` and `/album/[slug]` match the screens at 1440px wide and still work at 390px (columns stack, controls wrap, nothing overflows).
 - The carousel loops, animates, and works with mouse, keyboard and touch.
 - All text meets 4.5:1 contrast on its background; every control is a real `<button>` or `<a>` with a visible focus ring.
 - `npm run check` and `npm run build` pass.
