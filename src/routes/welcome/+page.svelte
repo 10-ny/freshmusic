@@ -37,7 +37,7 @@
       return;
     }
     localStorage.setItem(USER_ID_KEY, trimmed);
-    goto('/');
+    goto('/setup');
   }
 </script>
 
