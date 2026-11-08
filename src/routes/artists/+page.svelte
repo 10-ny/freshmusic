@@ -60,7 +60,7 @@
       </p>
     </div>
     <a
-      href="/setup"
+      href="/setup?from=artists"
       class="inline-flex items-center gap-2 px-[18px] text-[15px] font-medium text-on-primary transition-colors hover:bg-primary-hover"
       style="min-height:44px;border-radius:var(--radius-md);background:var(--color-primary)"
     >
