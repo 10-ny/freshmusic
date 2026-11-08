@@ -1,5 +1,6 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
+  import { page } from '$app/state';
   import Button from '#lib/components/Button.svelte';
   import Input from '#lib/components/Input.svelte';
   import Avatar from '#lib/components/Avatar.svelte';
@@ -13,8 +14,20 @@
     'Denzel Curry',
   ];
 
+  const isAddMode = $derived(page.url.searchParams.get('from') === 'artists');
+
   let query = $state('');
   let picked = $state<string[]>([]);
+
+  $effect(() => {
+    if (isAddMode) {
+      try {
+        picked = JSON.parse(localStorage.getItem(FOLLOWED_KEY) ?? '[]');
+      } catch {
+        picked = [];
+      }
+    }
+  });
 
   const searching = $derived(query.trim().length >= 3);
   const q = $derived(query.trim().toLowerCase());
@@ -22,6 +35,8 @@
     searching ? ALL_ARTISTS.filter((n) => n.toLowerCase().includes(q)) : []
   );
   const noResults = $derived(searching && results.length === 0);
+
+  const canSave = $derived(isAddMode ? picked.length >= 1 : picked.length >= 2);
 
   function toggle(name: string) {
     picked = picked.includes(name)
@@ -42,11 +57,11 @@
 
   function finish() {
     localStorage.setItem(FOLLOWED_KEY, JSON.stringify(picked));
-    goto('/');
+    goto('/artists');
   }
 
-  function skip() {
-    goto('/');
+  function cancel() {
+    goto('/artists');
   }
 </script>
 
@@ -66,13 +81,13 @@
       </svg>
       <span style="font-size:16px;font-weight:600;letter-spacing:-0.3px">FreshMusic</span>
     </span>
-    <span class="t-mono ml-auto text-ink-subtle">Setup · 1 of 1</span>
+    <span class="t-mono ml-auto text-ink-subtle">{isAddMode ? 'Add artists' : 'Setup · 1 of 1'}</span>
   </header>
 
   <!-- Content -->
   <main class="mx-auto w-full max-w-[1040px] flex-1 px-8 pb-40 pt-16 box-border">
 
-    <p class="t-eyebrow m-0 mb-4 text-[var(--color-primary-ink)]">Get started</p>
+    <p class="t-eyebrow m-0 mb-4 text-[var(--color-primary-ink)]">{isAddMode ? 'Your artists' : 'Get started'}</p>
     <h1 class="t-display-md m-0" style="font-size: clamp(32px, 5vw, 40px)">
       Pick the artists you follow
     </h1>
@@ -171,18 +186,24 @@
     <div class="mx-auto flex max-w-[1040px] flex-wrap items-center gap-3 px-8 py-4 box-border" style="gap: 12px 16px">
       <span role="status" class="t-body-sm text-ink-muted">
         <span class="t-mono text-ink">{picked.length}</span>
-        {picked.length === 0 ? ' selected · pick at least one to continue' : ' selected · you can add more later'}
+        {#if isAddMode}
+          {picked.length === 1 ? ' artist selected' : ' artists selected'}
+        {:else}
+          {picked.length < 2 ? ' selected · pick at least 2 to get started' : ' selected · you\'re good to go'}
+        {/if}
       </span>
       <div class="ml-auto flex items-center gap-2">
-        <button
-          type="button"
-          onclick={skip}
-          class="inline-flex min-h-[44px] cursor-pointer items-center px-[14px] text-[14px] font-medium text-ink-subtle transition-colors hover:text-ink"
-        >
-          Skip for now
-        </button>
-        <Button variant="primary" size="lg" disabled={picked.length === 0} onclick={finish}>
-          Show my releases
+        {#if isAddMode}
+          <button
+            type="button"
+            onclick={cancel}
+            class="inline-flex min-h-[44px] cursor-pointer items-center px-[14px] text-[14px] font-medium text-ink-subtle transition-colors hover:text-ink"
+          >
+            Cancel
+          </button>
+        {/if}
+        <Button variant="primary" size="lg" disabled={!canSave} onclick={finish}>
+          Save artists
           <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M6 3l5 5-5 5" />
           </svg>

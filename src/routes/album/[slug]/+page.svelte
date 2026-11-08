@@ -17,7 +17,7 @@
 </script>
 
 <svelte:head>
-  <title>{album.title} — {album.artist} · Rotation</title>
+  <title>{album.title} — {album.artist} · FreshMusic</title>
 </svelte:head>
 
 <main class="mx-auto w-full max-w-[1280px] px-8 py-16 pb-24 box-border">
