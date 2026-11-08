@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Welcome — sign in with your user ID</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/linearmarketingdesignsystem_868804/tokens.css">
+<link rel="stylesheet" href="ds/linearmarketingdesignsystem_868804/components/bundle.css">
+<script src="ds/linearmarketingdesignsystem_868804/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap">
+<style>
+body{margin:0;background:#010102}
+a{color:#a6afff;text-decoration:none}a:hover{color:#f7f8f8}
+</style>
+</helmet>
+<div style="min-height: 100vh; display: flex; flex-wrap: wrap; background: var(--color-canvas); color: var(--color-ink); font-family: var(--font-text);">
+<div style="flex: 1 1 480px; min-width: 0; display: flex; flex-direction: column; background: var(--color-canvas);">
+
+  <!-- Header: logo only -->
+  <header style="display: flex; align-items: center; padding: 20px 32px;">
+    <span style="display: flex; align-items: center; gap: 10px;">
+      <svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><rect width="22" height="22" rx="6" fill="#5e6ad2"></rect><circle cx="11" cy="11" r="6" fill="none" stroke="#ffffff" stroke-width="1.6"></circle><circle cx="11" cy="11" r="1.6" fill="#ffffff"></circle></svg>
+      <span style="font-size: 16px; font-weight: 600; letter-spacing: -0.3px;">Rotation</span>
+    </span>
+  </header>
+
+  <!-- Centered form -->
+  <main style="flex: 1; display: flex; align-items: center; justify-content: center; padding: 48px 24px 96px;">
+    <div style="width: 100%; max-width: 400px; display: flex; flex-direction: column; gap: 32px;">
+      <div style="text-align: center;">
+        <h1 class="t-display-md" style="margin: 0; font-size: clamp(32px, 5vw, 40px);">FreshMusic</h1>
+        <p class="t-body" style="margin: 12px 0 0; color: var(--color-ink-subtle);">Enter your user ID to see new releases from the artists you follow.</p>
+      </div>
+
+      <form onSubmit="{{submit}}" style="display: flex; flex-direction: column; gap: 16px;">
+        <x-import component-from-global-scope="LinearMarketingDesignSystem_868804.Input" label="User ID" placeholder="e.g. RT-7K2P-QX9M" value="{{userId}}" on-change="{{onInput}}" autocomplete="username" spellcheck="false" hint="{{hint}}"></x-import>
+        <a href="Main.dc.html" style="display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; border-radius: var(--radius-md); background: var(--color-primary); color: var(--color-on-primary); font-size: 15px; font-weight: 500;">Continue
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3l5 5-5 5"></path></svg>
+        </a>
+      </form>
+
+      <div style="display: flex; align-items: center; gap: 12px;" aria-hidden="true">
+        <span style="flex: 1; height: 1px; background: var(--color-hairline);"></span>
+        <span class="t-caption" style="color: var(--color-ink-subtle);">New here?</span>
+        <span style="flex: 1; height: 1px; background: var(--color-hairline);"></span>
+      </div>
+
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 12px;">
+        <x-import component-from-global-scope="LinearMarketingDesignSystem_868804.Button" variant="secondary" size="lg" on-click="{{create}}" style="min-height: 44px;">Create new user ID</x-import>
+        <sc-if value="{{created}}" hint-placeholder-val="{{false}}">
+          <div role="status" style="display: flex; align-items: center; gap: 10px; padding: 12px 14px; border: 1px solid var(--color-hairline); border-radius: var(--radius-md); background: var(--color-surface-1);">
+            <x-import component-from-global-scope="LinearMarketingDesignSystem_868804.Badge" tone="success" dot="{{yes}}">Created</x-import>
+            <span class="t-body-sm" style="color: var(--color-ink-muted);">Your new ID is filled in above. Save it — you'll need it to sign in.</span>
+          </div>
+        </sc-if>
+      </div>
+    </div>
+  </main>
+</div>
+
+  <!-- Left: faded black-and-white photo -->
+  <!-- Wave separator: the two offset ellipses of the wave CSS, turned vertical and used as the photo panel's right edge -->
+  <svg width="0" height="0" aria-hidden="true" style="position: absolute;"><defs><clipPath id="wave-edge" clipPathUnits="objectBoundingBox"><path d="M0,0 H1 C1,0.18 0.83,0.3 0.86,0.5 C0.89,0.7 1,0.78 1,1 H0 Z"></path></clipPath></defs></svg>
+  <aside aria-hidden="true" style="order: -1; position: relative; flex: 1 1 480px; min-height: 420px; overflow: hidden; background: #000000; clip-path: url(#wave-edge);">
+    <img src="/_blob/5f9a2678bfaf5eea1183f7a6a7858d08" alt="" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; filter: grayscale(1); opacity: 0.3;">
+  </aside>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { userId: '', created: false }; }
+  renderVals() {
+    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    const block = () => Array.from({ length: 4 }, () => chars[Math.floor(Math.random() * chars.length)]).join('');
+    return {
+      yes: true,
+      userId: this.state.userId,
+      created: this.state.created,
+      hint: this.state.created ? 'Generated just now' : 'The ID you got when you created your account.',
+      onInput: (e) => this.setState({ userId: e.target.value, created: false }),
+      submit: (e) => e.preventDefault(),
+      create: () => this.setState({ userId: `RT-${block()}-${block()}`, created: true })
+    };
+  }
+}
+</script>
+</body>
+</html>
