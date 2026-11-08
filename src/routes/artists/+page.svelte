@@ -3,6 +3,7 @@
   import Badge from '#lib/components/Badge.svelte';
   import { albums } from '#lib/data/albums';
 
+  const USER_ID_KEY = 'rotation-user-id';
   const FOLLOWED_KEY = 'rotation-followed-artists';
 
   function initials(name: string) {
@@ -17,18 +18,33 @@
   }
 
   let followed = $state<string[]>([]);
+  let loading = $state(true);
 
   $effect(() => {
-    try {
-      followed = JSON.parse(localStorage.getItem(FOLLOWED_KEY) ?? '[]');
-    } catch {
-      followed = [];
-    }
+    const id = localStorage.getItem(USER_ID_KEY);
+    if (!id) { loading = false; return; }
+
+    fetch(`/api/users/${encodeURIComponent(id)}/artists`)
+      .then((r) => r.json())
+      .then((data) => {
+        followed = data.artists ?? [];
+        localStorage.setItem(FOLLOWED_KEY, JSON.stringify(followed));
+      })
+      .catch(() => {
+        try { followed = JSON.parse(localStorage.getItem(FOLLOWED_KEY) ?? '[]'); } catch {}
+      })
+      .finally(() => { loading = false; });
   });
 
-  function unfollow(name: string) {
+  async function unfollow(name: string) {
+    const id = localStorage.getItem(USER_ID_KEY);
     followed = followed.filter((a) => a !== name);
     localStorage.setItem(FOLLOWED_KEY, JSON.stringify(followed));
+    if (id) {
+      await fetch(`/api/users/${encodeURIComponent(id)}/artists/${encodeURIComponent(name)}`, {
+        method: 'DELETE',
+      });
+    }
   }
 
   const artistCards = $derived(
@@ -71,7 +87,13 @@
     </a>
   </div>
 
-  {#if followed.length === 0}
+  {#if loading}
+    <div class="mt-10 grid gap-4" style="grid-template-columns: repeat(auto-fill, minmax(220px, 1fr))">
+      {#each { length: 4 } as _}
+        <div class="aspect-square animate-pulse rounded-lg border border-hairline bg-surface-1"></div>
+      {/each}
+    </div>
+  {:else if followed.length === 0}
     <div class="mt-16 flex flex-col items-center gap-4 text-center">
       <p class="t-body-lg m-0 text-ink-subtle">You're not following anyone yet.</p>
       <a
