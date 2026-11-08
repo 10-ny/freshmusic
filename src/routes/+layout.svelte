@@ -41,6 +41,7 @@
   }
 
   function confirmSignOut() {
+    signOutOpen = false;
     localStorage.removeItem(USER_ID_KEY);
     localStorage.removeItem('rotation-followed-artists');
     goto('/welcome');
