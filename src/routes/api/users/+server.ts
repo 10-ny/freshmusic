@@ -1,5 +1,5 @@
 import { json, error } from '@sveltejs/kit';
-import { db } from '#lib/server/db';
+import { getDb } from '#lib/server/db';
 import { users } from '#lib/server/schema';
 import { eq } from 'drizzle-orm';
 import type { RequestHandler } from './$types';
@@ -12,6 +12,7 @@ export const POST: RequestHandler = async ({ request }) => {
     error(400, 'id is required');
   }
 
+  const db = getDb();
   const existing = await db.select().from(users).where(eq(users.id, id)).limit(1);
 
   if (existing.length === 0) {

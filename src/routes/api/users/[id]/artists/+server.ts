@@ -1,10 +1,11 @@
 import { json, error } from '@sveltejs/kit';
-import { db } from '#lib/server/db';
+import { getDb } from '#lib/server/db';
 import { users, follows } from '#lib/server/schema';
 import { eq } from 'drizzle-orm';
 import type { RequestHandler } from './$types';
 
 export const GET: RequestHandler = async ({ params }) => {
+  const db = getDb();
   const rows = await db
     .select({ artistName: follows.artistName })
     .from(follows)
@@ -21,6 +22,7 @@ export const PUT: RequestHandler = async ({ params, request }) => {
     error(400, 'artists must be an array of strings');
   }
 
+  const db = getDb();
   const userExists = await db
     .select({ id: users.id })
     .from(users)
