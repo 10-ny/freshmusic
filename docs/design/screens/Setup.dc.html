@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Pick the artists you follow</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/linearmarketingdesignsystem_868804/tokens.css">
+<link rel="stylesheet" href="ds/linearmarketingdesignsystem_868804/components/bundle.css">
+<script src="ds/linearmarketingdesignsystem_868804/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap">
+<style>
+body{margin:0;background:#010102}
+a{color:#8a8f98;text-decoration:none}a:hover{color:#f7f8f8}
+.artist-name{opacity:0;transform:translateY(4px);transition:opacity 150ms ease,transform 150ms ease}
+.artist-card:hover .artist-name,.artist-card:focus-visible .artist-name{opacity:1;transform:none}
+@media (hover: none){.artist-name{opacity:1;transform:none}}
+</style>
+</helmet>
+<div style="min-height: 100vh; display: flex; flex-direction: column; background: var(--color-canvas); color: var(--color-ink); font-family: var(--font-text);">
+
+  <!-- Header: logo + step -->
+  <header style="display: flex; align-items: center; gap: 16px; padding: 20px 32px; border-bottom: 1px solid var(--color-hairline);">
+    <span style="display: flex; align-items: center; gap: 10px;">
+      <svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><rect width="22" height="22" rx="6" fill="#5e6ad2"></rect><circle cx="11" cy="11" r="6" fill="none" stroke="#ffffff" stroke-width="1.6"></circle><circle cx="11" cy="11" r="1.6" fill="#ffffff"></circle></svg>
+      <span style="font-size: 16px; font-weight: 600; letter-spacing: -0.3px;">FreshMusic</span>
+    </span>
+    <span class="t-mono" style="margin-left: auto; color: var(--color-ink-subtle);">Setup · 1 of 1</span>
+  </header>
+
+  <main style="flex: 1; width: 100%; max-width: 1040px; margin: 0 auto; padding: 64px 32px 160px; box-sizing: border-box;">
+    <div class="t-eyebrow" style="color: var(--color-primary-ink); margin-bottom: 16px;">Get started</div>
+    <h1 class="t-display-md" style="margin: 0; font-size: clamp(32px, 5vw, 40px);">Pick the artists you follow</h1>
+    <p class="t-body-lg" style="margin: 12px 0 0; max-width: 560px; color: var(--color-ink-subtle);">We'll show their latest albums first and flag anything new. You can change this any time.</p>
+
+    <!-- Search -->
+    <div style="margin: 40px auto 0; max-width: 480px;">
+      <x-import component-from-global-scope="LinearMarketingDesignSystem_868804.Input" label="Search artists" type="search" placeholder="Artist name" value="{{query}}" on-change="{{onQuery}}" hint="Type at least 3 letters"></x-import>
+    </div>
+
+    <!-- Results: empty until 3+ letters -->
+    <section aria-label="Search results" style="margin-top: 24px;">
+      <sc-if value="{{showResults}}" hint-placeholder-val="{{false}}">
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 16px;">
+          <sc-for list="{{results}}" as="a" hint-placeholder-count="4">
+            <button type="button" class="artist-card" onClick="{{a.toggle}}" aria-pressed="{{a.on}}" aria-label="{{a.label}}" style="position: relative; display: flex; flex-direction: column; gap: 10px; padding: 10px; text-align: left; cursor: pointer; border-radius: var(--radius-lg); font-family: var(--font-text); color: var(--color-ink); transition: background 150ms ease, border-color 150ms ease; background: {{a.bg}}; border: 1px solid {{a.border}};">
+              <span style="position: relative; display: flex; align-items: center; justify-content: center; aspect-ratio: 1 / 1; width: 100%; border-radius: var(--radius-md); background: var(--color-surface-3); overflow: hidden;">
+                <span style="font-family: var(--font-display); font-size: 36px; font-weight: 600; letter-spacing: -1px; color: var(--color-ink-subtle);">{{a.initials}}</span>
+                <span class="t-mono" style="position: absolute; left: 8px; top: 6px; font-size: 10px; color: var(--color-ink-subtle);">Artist photo</span>
+                <span class="artist-name" style="position: absolute; left: 0; right: 0; bottom: 0; padding: 24px 10px 10px; background: linear-gradient(0deg, rgba(1,1,2,0.85) 0%, rgba(1,1,2,0) 100%); font-size: 14px; font-weight: 500; color: var(--color-ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{a.name}}</span>
+              </span>
+              <span aria-hidden="true" style="position: absolute; top: 16px; right: 16px; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: {{a.checkBg}}; border: 1px solid {{a.checkBorder}};">
+                <sc-if value="{{a.on}}" hint-placeholder-val="{{false}}">
+                  <svg width="12" height="12" viewBox="0 0 14 14" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11.5 4 L6 9.5 L3 6.5"></path></svg>
+                </sc-if>
+              </span>
+            </button>
+          </sc-for>
+        </div>
+        <sc-if value="{{noResults}}" hint-placeholder-val="{{false}}">
+          <p class="t-body" style="margin: 0; color: var(--color-ink-subtle);">No artists match "{{query}}".</p>
+        </sc-if>
+      </sc-if>
+    </section>
+
+    <!-- Selected artists -->
+    <sc-if value="{{hasPicked}}" hint-placeholder-val="{{false}}">
+      <section aria-labelledby="picked-h" style="margin-top: 40px;">
+        <h2 id="picked-h" class="t-eyebrow" style="margin: 0 0 12px; color: var(--color-ink-subtle);">Your artists</h2>
+        <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+          <sc-for list="{{pickedList}}" as="p" hint-placeholder-count="2">
+            <button type="button" onClick="{{p.remove}}" aria-label="{{p.label}}" style="display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 4px 12px 4px 4px; border-radius: var(--radius-pill); border: 1px solid var(--color-hairline); background: var(--color-surface-1); color: var(--color-ink); font-family: var(--font-text); font-size: 14px; cursor: pointer;">
+              <x-import component-from-global-scope="LinearMarketingDesignSystem_868804.Avatar" name="{{p.name}}" size="{{avatarSize}}"></x-import>
+              {{p.name}}
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#8a8f98" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"></path></svg>
+            </button>
+          </sc-for>
+        </div>
+      </section>
+    </sc-if>
+  </main>
+
+  <!-- Sticky action bar -->
+  <div style="position: sticky; bottom: 0; border-top: 1px solid var(--color-hairline); background: rgba(1,1,2,0.92); backdrop-filter: blur(12px);">
+    <div style="max-width: 1040px; margin: 0 auto; padding: 16px 32px; box-sizing: border-box; display: flex; flex-wrap: wrap; align-items: center; gap: 12px 16px;">
+      <span role="status" class="t-body-sm" style="color: var(--color-ink-muted);"><span class="t-mono" style="color: var(--color-ink);">{{count}}</span> selected · {{countHint}}</span>
+      <div style="margin-left: auto; display: flex; align-items: center; gap: 8px;">
+        <a href="Main.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px; font-size: 14px; font-weight: 500;">Skip for now</a>
+        <sc-if value="{{ready}}" hint-placeholder-val="{{false}}">
+          <a href="Main.dc.html" style="display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 18px; box-sizing: border-box; border-radius: var(--radius-md); background: var(--color-primary); color: var(--color-on-primary); font-size: 15px; font-weight: 500;">Show my releases
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3l5 5-5 5"></path></svg>
+          </a>
+        </sc-if>
+        <sc-if value="{{notReady}}" hint-placeholder-val="{{true}}">
+          <x-import component-from-global-scope="LinearMarketingDesignSystem_868804.Button" variant="primary" size="lg" disabled="{{yes}}" style="min-height: 44px;">Show my releases</x-import>
+        </sc-if>
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1000}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { query: '', picked: ['Nas', 'JAY-Z'] }; }
+  renderVals() {
+    const all = ['Kendrick Lamar', 'Nas', 'JAY-Z', 'OutKast', 'A Tribe Called Quest', 'MF DOOM', 'Madlib', 'J. Cole', 'Little Simz', 'Tyler, the Creator', 'Mos Def', 'Common', 'Lauryn Hill', 'Wu-Tang Clan', 'Run the Jewels', 'Denzel Curry'];
+    const { query, picked } = this.state;
+    const q = query.trim().toLowerCase();
+    const searching = q.length >= 3;
+    const results = searching ? all.filter((n) => n.toLowerCase().includes(q)) : [];
+    const toggle = (n) => this.setState({ picked: picked.includes(n) ? picked.filter((p) => p !== n) : [...picked, n] });
+    const initials = (n) => n.replace(/[^A-Za-z ]/g, '').split(' ').filter(Boolean).map((w) => w[0]).slice(0, 2).join('').toUpperCase();
+    const count = picked.length;
+    return {
+      yes: true,
+      query,
+      avatarSize: 32,
+      onQuery: (e) => this.setState({ query: e.target.value }),
+      showResults: searching,
+      noResults: searching && results.length === 0,
+      results: results.map((name) => {
+        const on = picked.includes(name);
+        return {
+          name, on, initials: initials(name),
+          label: on ? `Remove ${name}` : `Add ${name}`,
+          toggle: () => toggle(name),
+          bg: on ? 'var(--color-surface-2)' : 'var(--color-surface-1)',
+          border: on ? 'var(--color-primary)' : 'var(--color-hairline)',
+          checkBg: on ? 'var(--color-primary)' : 'rgba(1,1,2,0.6)',
+          checkBorder: on ? 'var(--color-primary)' : 'var(--color-hairline-strong)'
+        };
+      }),
+      hasPicked: count > 0,
+      pickedList: picked.map((name) => ({ name, label: `Remove ${name}`, remove: () => toggle(name) })),
+      count,
+      countHint: count === 0 ? 'pick at least one to continue' : 'you can add more later',
+      ready: count > 0,
+      notReady: count === 0
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -8,6 +8,7 @@ This folder holds the design, not code to copy:
 | Path | What it is |
 | --- | --- |
 | `screens/Welcome.dc.html` | Welcome / user ID page — the first page visitors see (design source) |
+| `screens/Setup.dc.html` | Onboarding: pick the artists you follow (design source) |
 | `screens/Main.dc.html` | Hero / new-releases carousel (design source) |
 | `screens/Album.dc.html` | Album detail page (design source) |
 | `design-system/` | Tokens (`tokens.json`, `tokens.css`), the brand book (`README.md`), and component guidelines |
@@ -62,6 +63,7 @@ Read `design-system/README.md` first: it is the brand book (dark canvas, one lav
 | Route | Screen | Source |
 | --- | --- | --- |
 | `/` | Welcome: enter or create a user ID | `screens/Welcome.dc.html` |
+| `/setup` | Onboarding: pick artists | `screens/Setup.dc.html` |
 | `/releases` | New releases hero + carousel | `screens/Main.dc.html` |
 | `/album/[slug]` | Album detail | `screens/Album.dc.html` |
 
@@ -95,9 +97,26 @@ Full-height page, two columns that wrap (each `flex: 1 1 480px`); on narrow scre
   5. After creating: a `role="status"` row (surface-1, hairline, 8px radius) with a success Badge "Created" and "Your new ID is filled in above. Save it — you'll need it to sign in."
 
 **Behaviour**
-- Continue submits the form: validate the ID (non-empty; format `RT-XXXX-XXXX`, letters A–Z without I/O and digits 2–9), look it up, store the session, go to `/releases`. Show an inline error under the input for an empty or unknown ID.
-- Create new user ID: generate an ID in that format on the server, save the user, fill the input with it and show the status row. (The design generates it client-side as a mock.)
+- Continue submits the form: validate the ID (non-empty; format `RT-XXXX-XXXX`, letters A–Z without I/O and digits 2–9), look it up, store the session, go to `/releases` (or to `/setup` if the user follows no artists yet). Show an inline error under the input for an empty or unknown ID.
+- Create new user ID: generate an ID in that format on the server, save the user, fill the input with it and show the status row. Continue then goes to `/setup`. (The design generates it client-side as a mock.)
 - Keep the user's ID in a cookie/session; `/releases` and `/album/*` redirect to `/` when there is none.
+
+## 3c. Setup `/setup` — pick artists (onboarding)
+
+Shown after a new user ID is created (and whenever a user follows zero artists), so nobody lands on an empty carousel.
+
+- Header: logo + "FreshMusic", and `Setup · 1 of 1` in mono on the right. No Menu.
+- Content max-width 1040px: eyebrow "Get started", `t-display-md` "Pick the artists you follow", subline "We'll show their latest albums first and flag anything new. You can change this any time."
+- **Search**: design-system Input, label "Search artists", `type="search"`, hint "Type at least 3 letters", **centred** (max-width 480px, `margin-inline: auto`).
+- **Results**: nothing is shown until the query has **3 or more letters** (no placeholder box). Then a grid `repeat(auto-fill, minmax(150px, 1fr))`, gap 16px, of artist cards:
+  - card = `<button aria-pressed>` with `aria-label` "Add {name}" / "Remove {name}"; surface-1 + hairline, 12px radius, 10px padding; selected: surface-2 + primary border.
+  - square photo (8px radius, `object-cover`) — the artist image from the music API; fallback: initials on surface-3.
+  - the **name is not shown under the photo**: it fades in over the bottom of the photo on hover or keyboard focus (dark-to-transparent band, 150ms); on touch devices (`@media (hover: none)`) it is always visible.
+  - round 22px check top-right: empty ring when unselected, filled primary with a white check when selected.
+  - "No artists match "{query}"." when there are no results.
+  - Debounce the search (~250ms) and query the artist search endpoint; the design uses a local list.
+- **Your artists**: when at least one is picked, an eyebrow "Your artists" and removable pills (32px Avatar + name + ×, pill radius, 44px tall).
+- **Sticky bottom bar**: "{n} selected · pick at least one to continue / you can add more later" (`role="status"`), a "Skip for now" text link → `/releases`, and primary **Show my releases** → saves the followed artists, then `/releases`; disabled while nothing is picked.
 
 ## 4. Releases `/releases` — new-releases carousel
 
@@ -176,7 +195,7 @@ The Menu and its sections · artist pages / discography · real data and covers 
 
 ## 8. Done when
 
-- `/`, `/releases` and `/album/[slug]` match the screens at 1440px wide and still work at 390px (columns stack, controls wrap, nothing overflows).
+- `/`, `/setup`, `/releases` and `/album/[slug]` match the screens at 1440px wide and still work at 390px (columns stack, controls wrap, nothing overflows).
 - The carousel loops, animates, and works with mouse, keyboard and touch.
 - All text meets 4.5:1 contrast on its background; every control is a real `<button>` or `<a>` with a visible focus ring.
 - `npm run check` and `npm run build` pass.

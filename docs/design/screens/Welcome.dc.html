@@ -38,7 +38,7 @@ a{color:#a6afff;text-decoration:none}a:hover{color:#f7f8f8}
 
       <form onSubmit="{{submit}}" style="display: flex; flex-direction: column; gap: 16px;">
         <x-import component-from-global-scope="LinearMarketingDesignSystem_868804.Input" label="User ID" placeholder="e.g. RT-7K2P-QX9M" value="{{userId}}" on-change="{{onInput}}" autocomplete="username" spellcheck="false" hint="{{hint}}"></x-import>
-        <a href="Main.dc.html" style="display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; border-radius: var(--radius-md); background: var(--color-primary); color: var(--color-on-primary); font-size: 15px; font-weight: 500;">Continue
+        <a href="{{nextHref}}" style="display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; border-radius: var(--radius-md); background: var(--color-primary); color: var(--color-on-primary); font-size: 15px; font-weight: 500;">Continue
           <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3l5 5-5 5"></path></svg>
         </a>
       </form>
@@ -80,6 +80,7 @@ class Component extends DCLogic {
       yes: true,
       userId: this.state.userId,
       created: this.state.created,
+      nextHref: this.state.created ? 'Setup.dc.html' : 'Main.dc.html',
       hint: this.state.created ? 'Generated just now' : 'The ID you got when you created your account.',
       onInput: (e) => this.setState({ userId: e.target.value, created: false }),
       submit: (e) => e.preventDefault(),

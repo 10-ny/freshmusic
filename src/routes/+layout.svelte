@@ -10,16 +10,17 @@
   let { children }: { children: Snippet } = $props();
 
   const isWelcome = $derived(page.url.pathname === '/welcome');
+  const isSetup = $derived(page.url.pathname === '/setup');
   const isHome = $derived(page.url.pathname === '/');
 
   $effect(() => {
-    if (!isWelcome && !localStorage.getItem(USER_ID_KEY)) {
+    if (!isWelcome && !isSetup && !localStorage.getItem(USER_ID_KEY)) {
       goto('/welcome');
     }
   });
 </script>
 
-{#if isWelcome}
+{#if isWelcome || isSetup}
   {@render children()}
 {:else}
   <div class="flex min-h-screen flex-col bg-canvas text-ink">
