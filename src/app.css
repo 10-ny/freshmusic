@@ -1,0 +1,60 @@
+@import "tailwindcss";
+@import "./lib/design/tokens.css";
+
+@theme inline {
+  --color-canvas: var(--color-canvas);
+  --color-surface-1: var(--color-surface-1);
+  --color-surface-2: var(--color-surface-2);
+  --color-surface-3: var(--color-surface-3);
+  --color-surface-4: var(--color-surface-4);
+  --color-hairline: var(--color-hairline);
+  --color-hairline-strong: var(--color-hairline-strong);
+  --color-hairline-tertiary: var(--color-hairline-tertiary);
+  --color-ink: var(--color-ink);
+  --color-ink-muted: var(--color-ink-muted);
+  --color-ink-subtle: var(--color-ink-subtle);
+  --color-ink-tertiary: var(--color-ink-tertiary);
+  --color-primary: var(--color-primary);
+  --color-primary-hover: var(--color-primary-hover);
+  --color-primary-focus: var(--color-primary-focus);
+  --color-primary-ink: var(--color-primary-ink);
+  --color-on-primary: var(--color-on-primary);
+  --color-success: var(--color-success);
+  --color-success-ink: var(--color-success-ink);
+  --radius-xs: var(--radius-xs);
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+  --radius-xl: var(--radius-xl);
+  --radius-xxl: var(--radius-xxl);
+  --radius-pill: var(--radius-pill);
+  --font-sans: var(--font-text);
+  --font-mono: var(--font-mono);
+}
+
+:root {
+  color-scheme: dark;
+  --pad-button: 8px 14px;
+  --pad-input: 8px 12px;
+}
+
+body {
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  font-family: var(--font-text);
+  font-size: var(--body-size);
+  line-height: var(--body-lh);
+  letter-spacing: var(--body-ls);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.t-eyebrow { text-transform: uppercase; }
+
+a {
+  color: var(--color-ink-subtle);
+  text-decoration: none;
+}
+a:hover {
+  color: var(--color-ink);
+}

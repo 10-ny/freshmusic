@@ -1,0 +1,24 @@
+/* Linear Marketing — component stylesheet. Loaded after tokens.css.
+   Values that live in tokens.json are not redeclared here. */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  color-scheme: dark;
+  /* Composite paddings (two values) — not expressible as tokens */
+  --pad-button: 8px 14px;
+  --pad-input: 8px 12px;
+}
+
+body {
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  font-family: var(--font-text);
+  font-size: var(--body-size);
+  line-height: var(--body-lh);
+  letter-spacing: var(--body-ls);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* The eyebrow is the one uppercase style */
+.t-eyebrow { text-transform: uppercase; }

@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>New releases</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/linearmarketingdesignsystem_868804/tokens.css">
+<link rel="stylesheet" href="ds/linearmarketingdesignsystem_868804/components/bundle.css">
+<script src="ds/linearmarketingdesignsystem_868804/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap">
+<style>
+body{margin:0;background:#010102}
+a{color:#8a8f98;text-decoration:none}a:hover{color:#f7f8f8}
+</style>
+</helmet>
+<div style="--card: clamp(240px, 30vw, 440px); position: relative; min-height: 100vh; display: flex; flex-direction: column; background: var(--color-canvas); color: var(--color-ink); font-family: var(--font-text); overflow: hidden;">
+
+  <!-- Header -->
+  <header style="position: relative; z-index: 5; display: flex; align-items: center; gap: 24px; padding: 20px 32px; border-bottom: 1px solid var(--color-hairline);">
+    <a href="#top" style="display: flex; align-items: center; gap: 10px; color: var(--color-ink);">
+      <svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><rect width="22" height="22" rx="6" fill="#5e6ad2"></rect><circle cx="11" cy="11" r="6" fill="none" stroke="#ffffff" stroke-width="1.6"></circle><circle cx="11" cy="11" r="1.6" fill="#ffffff"></circle></svg>
+      <span style="font-size: 16px; font-weight: 600; letter-spacing: -0.3px;">Rotation</span>
+    </a>
+    <span class="t-eyebrow" style="color: var(--color-ink-subtle);">New releases</span>
+    <div style="margin-left: auto;">
+      <x-import component-from-global-scope="LinearMarketingDesignSystem_868804.Button" variant="secondary" size="md" aria-label="Open menu" icon-left="{{menuIcon}}">Menu</x-import>
+    </div>
+  </header>
+
+  <!-- Carousel stage -->
+  <main id="top" style="position: relative; flex: 1; display: flex; flex-direction: column; min-height: 640px;">
+
+    <!-- Giant index behind the cards -->
+    <div aria-hidden="true" style="position: absolute; left: 32px; top: 24px; font-family: var(--font-display); font-weight: 600; font-size: clamp(120px, 18vw, 260px); line-height: 0.9; letter-spacing: -0.04em; color: var(--color-surface-3); user-select: none;">{{current.num}}</div>
+
+    <!-- Track -->
+    <div role="region" aria-roledescription="carousel" aria-label="Latest albums from artists you follow" style="position: relative; flex: 1; min-height: calc(var(--card) + 80px);">
+      <sc-for list="{{slides}}" as="s" hint-placeholder-count="6">
+        <button type="button" onClick="{{s.pick}}" aria-label="{{s.label}}" style="position: absolute; left: 50%; top: 50%; width: var(--card); height: var(--card); margin: calc(var(--card) / -2) 0 0 calc(var(--card) / -2); padding: 0; border: 1px solid var(--color-hairline); border-radius: var(--radius-xl); background: var(--color-surface-1); overflow: hidden; cursor: pointer; transition: transform 600ms cubic-bezier(0.22, 1, 0.36, 1), opacity 600ms ease, filter 600ms ease; transform: translateX(calc(var(--card) * {{s.tx}})) scale({{s.sc}}); opacity: {{s.op}}; z-index: {{s.z}}; filter: grayscale({{s.gray}});">
+          <svg viewBox="0 0 400 400" width="100%" height="100%" aria-hidden="true" style="display: block;">
+            <rect width="400" height="400" fill="{{s.art.bg}}"></rect>
+            <sc-if value="{{s.art.k1}}" hint-placeholder-val="{{true}}">
+              <circle cx="200" cy="200" r="150" fill="{{s.art.a}}"></circle>
+              <circle cx="200" cy="200" r="96" fill="{{s.art.bg}}"></circle>
+              <circle cx="200" cy="200" r="40" fill="{{s.art.b}}"></circle>
+              <rect x="0" y="330" width="400" height="2" fill="{{s.art.b}}"></rect>
+            </sc-if>
+            <sc-if value="{{s.art.k2}}" hint-placeholder-val="{{false}}">
+              <rect x="40" y="40" width="200" height="320" rx="16" fill="{{s.art.a}}"></rect>
+              <rect x="256" y="40" width="104" height="152" rx="12" fill="{{s.art.b}}"></rect>
+              <circle cx="308" cy="290" r="52" fill="{{s.art.a}}"></circle>
+            </sc-if>
+            <sc-if value="{{s.art.k3}}" hint-placeholder-val="{{false}}">
+              <rect x="0" y="0" width="400" height="160" fill="{{s.art.a}}"></rect>
+              <rect x="0" y="176" width="400" height="24" fill="{{s.art.b}}"></rect>
+              <rect x="0" y="216" width="400" height="8" fill="{{s.art.b}}"></rect>
+              <circle cx="300" cy="160" r="64" fill="{{s.art.bg}}"></circle>
+            </sc-if>
+          </svg>
+          <sc-if value="{{s.isNew}}" hint-placeholder-val="{{false}}">
+            <span style="position: absolute; top: 16px; left: 16px;">
+              <x-import component-from-global-scope="LinearMarketingDesignSystem_868804.Badge" tone="brand" dot="{{yes}}">New</x-import>
+            </span>
+          </sc-if>
+        </button>
+      </sc-for>
+    </div>
+
+    <!-- Caption + controls -->
+    <div style="position: relative; z-index: 5; display: flex; flex-wrap: wrap; align-items: flex-end; gap: 24px 48px; padding: 0 32px 40px;">
+      <div style="flex: 1 1 420px; min-width: 0;">
+        <h1 class="t-display-lg" style="margin: 0; font-size: clamp(36px, 5vw, 56px);">{{current.title}}</h1>
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: 12px 32px; max-width: 680px; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--color-hairline);">
+          <div style="display: flex; flex-direction: column; gap: 4px; min-width: 0;">
+            <span class="t-body-lg" style="color: var(--color-ink); font-weight: 500;">{{current.artist}}</span>
+            <span class="t-body-sm" style="color: var(--color-ink-subtle);">Produced by <span style="color: var(--color-ink-muted);">{{current.producer}}</span></span>
+          </div>
+          <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 4px; text-align: right;">
+            <span class="t-eyebrow" style="font-size: 11px; color: var(--color-ink-subtle);">Released</span>
+            <span class="t-mono" style="font-size: 15px; color: var(--color-ink);">{{current.date}}</span>
+          </div>
+        </div>
+        <div style="margin-top: 24px;">
+          <a href="Album.dc.html" style="display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 18px; box-sizing: border-box; border-radius: var(--radius-md); background: var(--color-primary); color: var(--color-on-primary); font-size: 15px; font-weight: 500;">View album
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3l5 5-5 5"></path></svg>
+          </a>
+        </div>
+      </div>
+
+      <div style="flex: 0 1 auto; display: flex; flex-direction: column; align-items: flex-end; gap: 16px;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <sc-for list="{{slides}}" as="d" hint-placeholder-count="6">
+            <button type="button" onClick="{{d.pick}}" aria-label="{{d.label}}" style="width: 44px; height: 44px; padding: 0; border: 0; background: transparent; cursor: pointer; display: flex; align-items: center;">
+              <span style="display: block; width: 100%; height: 2px; border-radius: 1px; background: {{d.bar}};"></span>
+            </button>
+          </sc-for>
+        </div>
+        <div style="display: flex; align-items: center; gap: 16px;">
+          <span class="t-mono" style="color: var(--color-ink-subtle);"><span style="color: var(--color-ink);">{{current.num}}</span> / {{total}}</span>
+          <button type="button" onClick="{{prev}}" aria-label="Previous album" style="width: 44px; height: 44px; border-radius: var(--radius-md); border: 1px solid var(--color-hairline); background: var(--color-surface-1); color: var(--color-ink); cursor: pointer; display: flex; align-items: center; justify-content: center;">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3L5 8l5 5"></path></svg>
+          </button>
+          <button type="button" onClick="{{next}}" aria-label="Next album" style="width: 44px; height: 44px; border-radius: var(--radius-md); border: 1px solid var(--color-hairline); background: var(--color-surface-1); color: var(--color-ink); cursor: pointer; display: flex; align-items: center; justify-content: center;">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3l5 5-5 5"></path></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { i: 0 }; }
+  renderVals() {
+    const albums = [
+      { artist: 'Kendrick Lamar', title: 'To Pimp a Butterfly', year: '2015', date: '15 March 2015', producer: 'Sounwave, Terrace Martin & others', isNew: true,  art: { k1: true,  bg: '#0c0d10', a: '#5e6ad2', b: '#f7f8f8' } },
+      { artist: 'Madvillain',     title: 'Madvillainy',         year: '2004', date: '23 March 2004', producer: 'Madlib', isNew: true,  art: { k2: true,  bg: '#141517', a: '#7a7fad', b: '#d0d6e0' } },
+      { artist: 'JAY-Z',          title: 'The Blueprint',       year: '2001', date: '11 September 2001', producer: 'Kanye West, Just Blaze & others', isNew: false, art: { k3: true,  bg: '#1f2023', a: '#5e6ad2', b: '#8a8f98' } },
+      { artist: 'OutKast',        title: 'Aquemini',            year: '1998', date: '29 September 1998', producer: 'Organized Noize & OutKast', isNew: false, art: { k1: true,  bg: '#191a1c', a: '#d0d6e0', b: '#5e6ad2' } },
+      { artist: 'Nas',            title: 'Illmatic',            year: '1994', date: '19 April 1994', producer: 'DJ Premier, Pete Rock & others', isNew: false, art: { k2: true,  bg: '#0c0d10', a: '#f7f8f8', b: '#5e6ad2' } },
+      { artist: 'A Tribe Called Quest', title: 'The Low End Theory', year: '1991', date: '24 September 1991', producer: 'A Tribe Called Quest', isNew: false, art: { k3: true, bg: '#141517', a: '#7a7fad', b: '#f7f8f8' } }
+    ];
+    const n = albums.length;
+    const i = this.state.i;
+    const go = (k) => this.setState({ i: ((k % n) + n) % n });
+    const pad = (k) => String(k + 1).padStart(2, '0');
+    const slides = albums.map((al, k) => {
+      let off = k - i;
+      if (off > n / 2) off -= n;
+      if (off < -n / 2) off += n;
+      const abs = Math.abs(off);
+      return {
+        ...al,
+        label: `${al.artist} — ${al.title}` + (abs === 0 ? ' (selected)' : ''),
+        tx: off * 0.92,
+        sc: abs === 0 ? 1 : abs === 1 ? 0.72 : 0.55,
+        op: abs === 0 ? 1 : abs === 1 ? 0.5 : abs === 2 ? 0.18 : 0,
+        z: 10 - abs,
+        gray: abs === 0 ? 0 : 0.6,
+        bar: abs === 0 ? 'var(--color-primary)' : 'var(--color-hairline-strong)',
+        pick: () => go(k)
+      };
+    });
+    const cur = albums[i];
+    return {
+      yes: true,
+      slides,
+      total: pad(n - 1),
+      current: { ...cur, num: pad(i) },
+      prev: () => go(i - 1),
+      next: () => go(i + 1),
+      menuIcon: React.createElement('svg', { width: 16, height: 16, viewBox: '0 0 16 16', fill: 'none', stroke: 'currentColor', strokeWidth: 1.5, strokeLinecap: 'round', 'aria-hidden': true }, React.createElement('path', { d: 'M2.5 5h11M2.5 11h11' }))
+    };
+  }
+}
+</script>
+</body>
+</html>

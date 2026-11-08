@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>To Pimp a Butterfly — album</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/linearmarketingdesignsystem_868804/tokens.css">
+<link rel="stylesheet" href="ds/linearmarketingdesignsystem_868804/components/bundle.css">
+<script src="ds/linearmarketingdesignsystem_868804/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap">
+<style>
+body{margin:0;background:#010102}
+a{color:#8a8f98;text-decoration:none}a:hover{color:#f7f8f8}
+.reveal{opacity:0;transform:scale(1.04);animation:reveal 1200ms cubic-bezier(0.22,1,0.36,1) 150ms forwards}
+@keyframes reveal{to{opacity:1;transform:scale(1)}}
+@media (prefers-reduced-motion: reduce){.reveal{animation:none;opacity:1;transform:none}}
+</style>
+</helmet>
+<div style="min-height: 100vh; display: flex; flex-direction: column; background: var(--color-canvas); color: var(--color-ink); font-family: var(--font-text);">
+
+  <!-- Header -->
+  <header style="display: flex; align-items: center; gap: 24px; padding: 20px 32px; border-bottom: 1px solid var(--color-hairline);">
+    <a href="Main.dc.html" style="display: flex; align-items: center; gap: 10px; color: var(--color-ink);">
+      <svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><rect width="22" height="22" rx="6" fill="#5e6ad2"></rect><circle cx="11" cy="11" r="6" fill="none" stroke="#ffffff" stroke-width="1.6"></circle><circle cx="11" cy="11" r="1.6" fill="#ffffff"></circle></svg>
+      <span style="font-size: 16px; font-weight: 600; letter-spacing: -0.3px;">Rotation</span>
+    </a>
+    <a href="Main.dc.html" style="display: inline-flex; align-items: center; gap: 6px; font-size: 14px; min-height: 44px;">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3L5 8l5 5"></path></svg>
+      New releases
+    </a>
+    <div style="margin-left: auto;">
+      <x-import component-from-global-scope="LinearMarketingDesignSystem_868804.Button" variant="secondary" size="md" aria-label="Open menu" icon-left="{{menuIcon}}">Menu</x-import>
+    </div>
+  </header>
+
+  <main style="flex: 1; max-width: 1280px; width: 100%; margin: 0 auto; padding: 64px 32px 96px; box-sizing: border-box; display: flex; flex-wrap: wrap; gap: 64px; align-items: flex-start;">
+
+    <!-- Left: cover + album info -->
+    <div style="flex: 1 1 480px; min-width: 0; display: flex; flex-direction: column; gap: 32px;">
+    <figure style="margin: 0;">
+      <div style="position: relative; aspect-ratio: 1 / 1; border: 1px solid var(--color-hairline); border-radius: var(--radius-xl); background: var(--color-surface-1); overflow: hidden;">
+        <img class="reveal" src="/_blob/670ddf24b9bd62bfe58c434ec923deed" alt="Album cover" style="display: block; width: 100%; height: 100%; object-fit: cover;">
+      </div>
+      <figcaption class="t-mono" style="display: flex; justify-content: space-between; margin-top: 12px; font-size: 11px; color: var(--color-ink-subtle);"><span>01 / 06</span><span>Cover</span></figcaption>
+    </figure>
+
+      <section>
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px;">
+          <x-import component-from-global-scope="LinearMarketingDesignSystem_868804.Badge" tone="brand" dot="{{yes}}">New</x-import>
+          <x-import component-from-global-scope="LinearMarketingDesignSystem_868804.Tag">Album</x-import>
+        </div>
+        <h1 class="t-display-lg" style="margin: 0; font-size: clamp(40px, 5vw, 56px);">To Pimp a Butterfly</h1>
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: 12px 32px; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--color-hairline);">
+          <div style="display: flex; flex-direction: column; gap: 4px;">
+            <span class="t-body-lg" style="font-weight: 500;">Kendrick Lamar</span>
+            <span class="t-body-sm" style="color: var(--color-ink-subtle);">Produced by <span style="color: var(--color-ink-muted);">Sounwave, Terrace Martin &amp; others</span></span>
+          </div>
+          <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 4px; text-align: right;">
+            <span class="t-eyebrow" style="font-size: 11px; color: var(--color-ink-subtle);">Released</span>
+            <span class="t-mono" style="font-size: 15px;">15 March 2015</span>
+          </div>
+        </div>
+        <dl style="display: flex; flex-wrap: wrap; gap: 16px 40px; margin: 24px 0 0;">
+          <div><dt class="t-caption" style="color: var(--color-ink-subtle);">Label</dt><dd style="margin: 4px 0 0; font-size: 14px; color: var(--color-ink-muted);">Top Dawg · Aftermath · Interscope</dd></div>
+          <div><dt class="t-caption" style="color: var(--color-ink-subtle);">Tracks</dt><dd style="margin: 4px 0 0; font-size: 14px; color: var(--color-ink-muted);">16</dd></div>
+        </dl>
+      </section>
+    </div>
+
+    <!-- Right: tracklist -->
+    <div style="flex: 1 1 380px; min-width: 0;">
+      <!-- Tracklist -->
+      <section aria-labelledby="tracks-h">
+        <h2 id="tracks-h" class="t-eyebrow" style="margin: 0 0 12px; color: var(--color-ink-subtle);">Tracklist</h2>
+        <ol style="list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--color-hairline);">
+          <sc-for list="{{tracks}}" as="t" hint-placeholder-count="16">
+            <li style="display: flex; align-items: center; gap: 16px; padding: 10px 0; border-bottom: 1px solid var(--color-hairline); font-size: 14px;">
+              <span class="t-mono" style="width: 24px; color: var(--color-ink-subtle);">{{t.n}}</span>
+              <span style="color: var(--color-ink);">{{t.name}}</span>
+            </li>
+          </sc-for>
+        </ol>
+      </section>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1500}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const names = ["Wesley's Theory", 'For Free? (Interlude)', 'King Kunta', 'Institutionalized', 'These Walls', 'u', 'Alright', 'For Sale? (Interlude)', 'Momma', 'Hood Politics', 'How Much a Dollar Cost', 'Complexion (A Zulu Love)', 'The Blacker the Berry', "You Ain't Gotta Lie (Momma Said)", 'i', 'Mortal Man'];
+    return {
+      yes: true,
+      tracks: names.map((name, k) => ({ n: String(k + 1).padStart(2, '0'), name })),
+      menuIcon: React.createElement('svg', { width: 16, height: 16, viewBox: '0 0 16 16', fill: 'none', stroke: 'currentColor', strokeWidth: 1.5, strokeLinecap: 'round', 'aria-hidden': true }, React.createElement('path', { d: 'M2.5 5h11M2.5 11h11' }))
+    };
+  }
+}
+</script>
+</body>
+</html>
