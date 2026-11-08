@@ -42,11 +42,11 @@
 
   function finish() {
     localStorage.setItem(FOLLOWED_KEY, JSON.stringify(picked));
-    goto('/');
+    goto('/releases');
   }
 
   function skip() {
-    goto('/');
+    goto('/releases');
   }
 </script>
 
