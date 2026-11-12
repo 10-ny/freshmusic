@@ -10,6 +10,7 @@ This folder holds the design, not code to copy:
 | `screens/Welcome.dc.html` | Welcome / user ID page — the first page visitors see (design source) |
 | `screens/Setup.dc.html` | Onboarding: pick the artists you follow (design source) |
 | `screens/Main.dc.html` | Hero / new-releases carousel (design source) |
+| `screens/Artists.dc.html` | Artists you follow (design source) |
 | `screens/Album.dc.html` | Album detail page (design source) |
 | `design-system/` | Tokens (`tokens.json`, `tokens.css`), the brand book (`README.md`), and component guidelines |
 | `assets/cover.jpg` | Sample cover image for the album page |
@@ -65,17 +66,26 @@ Read `design-system/README.md` first: it is the brand book (dark canvas, one lav
 | `/` | Welcome: enter or create a user ID | `screens/Welcome.dc.html` |
 | `/setup` | Onboarding: pick artists | `screens/Setup.dc.html` |
 | `/releases` | New releases hero + carousel | `screens/Main.dc.html` |
+| `/artists` | Artists you follow | `screens/Artists.dc.html` |
 | `/album/[slug]` | Album detail | `screens/Album.dc.html` |
 
-`/releases` and `/album/[slug]` share a layout with the header (section 3). The welcome page has its own minimal header (logo only). Links that pointed to `/` in the designs (logo, "← New releases") now go to `/releases`.
+`/releases`, `/artists` and `/album/[slug]` share a layout with the header (section 3). The welcome page has its own minimal header (logo only). Links that pointed to `/` in the designs (logo, "← New releases") now go to `/releases`.
 
 Naming: the welcome page headline is **FreshMusic**; the logo wordmark in the screens still reads "Rotation". Use "FreshMusic" everywhere unless told otherwise.
 
-## 3. Header (both pages)
+## 3. Header (signed-in pages: `/releases`, `/artists`, `/album/*`)
 
-- Left: logo mark (lavender rounded square with a white ring + dot, inline SVG in the source) + wordmark "Rotation", linking to `/`. On `/` the "New releases" eyebrow sits next to it; on album pages a "← New releases" link instead.
-- Right: **Menu** button (secondary, hamburger icon). It opens nothing yet: render it with `aria-expanded="false"` and leave a TODO. Menu sections (all artists, others TBD) come later.
-- 1px hairline bottom border, 20px / 32px padding.
+A single top bar, no menu button or drawer.
+
+- Flex row, `align-items: center`, padding 20px 32px, gap 16px 32px, wraps on narrow screens, 1px hairline bottom border.
+- **Left:** logo mark (lavender rounded square with a white ring + dot, inline SVG in the screens) + wordmark **FreshMusic** (16px, 600), linking to `/releases`.
+- **Centre** (`<nav aria-label="Main">`, `flex: 1`, centred, gap 28px): **New releases** → `/releases`, **Artists** → `/artists`. 16px / 500, 44px-tall hit areas. Current page: `color-ink` + `aria-current="page"`; others `color-ink-subtle`. The album page highlights neither.
+- **Right:** **Sign out** text button (same type, ink-subtle). It does not sign out immediately; it opens the reminder dialog:
+  - `role="dialog" aria-modal="true"`, centred, max-width 420px, surface-1, `hairline-strong` border, 12px radius, 28px padding, over a `rgba(0,0,0,0.7)` scrim (click = cancel; also close on Escape and trap focus).
+  - Title "Keep your user ID" (`t-headline`, 24px); text "There's no password. You'll need this ID to sign back in and see your artists, so save it somewhere safe before you go."
+  - The signed-in user's ID in mono 18px in a canvas-coloured box, with a secondary sm **Copy** button (clipboard; label becomes "Copied").
+  - Actions right-aligned: tertiary **Cancel**, primary **Sign out** (clears the session, goes to `/`).
+- Adding artists is not in the bar: it lives on `/artists` ("+ Add artists" → `/setup`).
 
 ## 3b. Welcome `/` — user ID
 
@@ -88,7 +98,7 @@ Full-height page, two columns that wrap (each `flex: 1 1 480px`); on narrow scre
   (`clip-path: url(#wave-edge)`). It is the two-ellipse wave separator turned vertical: the edge curves about 14% into the photo and swings back out lower down. No border, no gradient.
 
 **Right: form column** (black canvas)
-- Header: logo only (no Menu).
+- Header: logo only (no nav).
 - Centred block, max-width 400px, gap 32px:
   1. **FreshMusic** (`t-display-md`, `clamp(32px, 5vw, 40px)`), centred, with "Enter your user ID to see new releases from the artists you follow." under it (`t-body`, ink-subtle).
   2. Form: **User ID** input (design-system Input: label, placeholder `e.g. RT-7K2P-QX9M`, hint "The ID you got when you created your account.", `autocomplete="username"`, `spellcheck="false"`), then a full-width primary **Continue** button (44px tall, trailing chevron).
@@ -149,6 +159,16 @@ Full-height page (`min-h-screen`), flex column: header, carousel stage, caption 
 - Counter in mono: `01 / 06` (current in ink, rest subtle).
 - Previous / next square buttons, 44px, surface-1 + hairline, chevron icons, with `aria-label`s.
 
+## 4b. Artists `/artists`
+
+- Max width 1280px, padding 64px 32px 96px.
+- Top row (wraps): `t-display-md` "Your artists" + "You follow {n} artists. New albums from them show up first." (count in mono) on the left; primary **+ Add artists** → `/setup` on the right.
+- Grid `repeat(auto-fill, minmax(220px, 1fr))`, gap 16px, one card per followed artist:
+  - surface-1, hairline, 12px radius; square artist photo on top (API image, fallback: initials on surface-3); brand Badge "New album" top-right when they have a new release.
+  - Name (`t-card-title`, 18px); "Latest: {album} · {year}" (`t-body-sm`, year in mono).
+  - Buttons: **Discography** (secondary-style link, future artist page) and **Unfollow** (ghost; removes immediately, consider an undo toast).
+- Empty state: "You're not following anyone yet." plus the Add artists button.
+
 ## 5. Album page `/album/[slug]`
 
 Max width 1280px, padding 64px 32px 96px, two columns that wrap (gap 64px):
@@ -191,11 +211,11 @@ Seed it with the six albums in the `<script>` block of `screens/Main.dc.html` (t
 
 ## 7. Not in scope yet
 
-The Menu and its sections · artist pages / discography · real data and covers · real authentication beyond the user ID (passwords, OAuth).
+Artist detail / discography pages · real data and covers · real authentication beyond the user ID (passwords, OAuth).
 
 ## 8. Done when
 
-- `/`, `/setup`, `/releases` and `/album/[slug]` match the screens at 1440px wide and still work at 390px (columns stack, controls wrap, nothing overflows).
+- `/`, `/setup`, `/releases`, `/artists` and `/album/[slug]` match the screens at 1440px wide and still work at 390px (columns stack, controls wrap, nothing overflows).
 - The carousel loops, animates, and works with mouse, keyboard and touch.
 - All text meets 4.5:1 contrast on its background; every control is a real `<button>` or `<a>` with a visible focus ring.
 - `npm run check` and `npm run build` pass.
