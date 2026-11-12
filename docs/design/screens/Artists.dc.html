@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Your artists</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/linearmarketingdesignsystem_868804/tokens.css">
+<link rel="stylesheet" href="ds/linearmarketingdesignsystem_868804/components/bundle.css">
+<script src="ds/linearmarketingdesignsystem_868804/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap">
+<style>
+body{margin:0;background:#010102}
+a{color:#8a8f98;text-decoration:none}a:hover{color:#f7f8f8}
+</style>
+</helmet>
+<div style="min-height: 100vh; display: flex; flex-direction: column; background: var(--color-canvas); color: var(--color-ink); font-family: var(--font-text);">
+
+  <!-- Header -->
+  <header style="display: flex; align-items: center; gap: 16px 32px; flex-wrap: wrap; padding: 20px 32px; border-bottom: 1px solid var(--color-hairline);">
+    <a href="Main.dc.html" style="display: flex; align-items: center; gap: 10px; color: var(--color-ink);">
+      <svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><rect width="22" height="22" rx="6" fill="#5e6ad2"></rect><circle cx="11" cy="11" r="6" fill="none" stroke="#ffffff" stroke-width="1.6"></circle><circle cx="11" cy="11" r="1.6" fill="#ffffff"></circle></svg>
+      <span style="font-size: 16px; font-weight: 600; letter-spacing: -0.3px;">FreshMusic</span>
+    </a>
+    <nav aria-label="Main" style="flex: 1 1 auto; display: flex; justify-content: center; gap: 28px;">
+      <a href="Main.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 4px; font-size: 16px; font-weight: 500; letter-spacing: -0.2px; color: var(--color-ink-subtle);">New releases</a>
+      <a href="Artists.dc.html" aria-current="page" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 4px; font-size: 16px; font-weight: 500; letter-spacing: -0.2px; color: var(--color-ink);">Artists</a>
+    </nav>
+    <button type="button" onClick="{{openSignOut}}" aria-haspopup="dialog" style="min-height: 44px; padding: 0 4px; border: 0; background: transparent; cursor: pointer; font-family: var(--font-text); font-size: 16px; font-weight: 500; letter-spacing: -0.2px; color: var(--color-ink-subtle);">Sign out</button>
+  </header>
+
+  <!-- Sign-out reminder -->
+  <sc-if value="{{signOutOpen}}" hint-placeholder-val="{{false}}">
+    <div style="position: fixed; inset: 0; z-index: 50; display: flex; align-items: center; justify-content: center; padding: 24px;">
+      <button type="button" aria-label="Cancel" onClick="{{closeSignOut}}" style="position: absolute; inset: 0; width: 100%; border: 0; padding: 0; background: rgba(0,0,0,0.7); cursor: pointer;"></button>
+      <div role="dialog" aria-modal="true" aria-labelledby="so-title" style="position: relative; width: 100%; max-width: 420px; box-sizing: border-box; padding: 28px; border: 1px solid var(--color-hairline-strong); border-radius: var(--radius-lg); background: var(--color-surface-1);">
+        <h2 id="so-title" class="t-headline" style="margin: 0; font-size: 24px;">Keep your user ID</h2>
+        <p class="t-body" style="margin: 8px 0 0; color: var(--color-ink-subtle);">There's no password. You'll need this ID to sign back in and see your artists, so save it somewhere safe before you go.</p>
+        <div style="display: flex; align-items: center; gap: 12px; margin-top: 20px; padding: 12px 12px 12px 16px; border: 1px solid var(--color-hairline); border-radius: var(--radius-md); background: var(--color-canvas);">
+          <span class="t-mono" style="flex: 1; font-size: 18px; letter-spacing: 0.5px; color: var(--color-ink);">{{userId}}</span>
+          <x-import component-from-global-scope="LinearMarketingDesignSystem_868804.Button" variant="secondary" size="sm" on-click="{{copyId}}" style="min-height: 36px;">{{copyLabel}}</x-import>
+        </div>
+        <div style="display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; margin-top: 24px;">
+          <x-import component-from-global-scope="LinearMarketingDesignSystem_868804.Button" variant="tertiary" size="lg" on-click="{{closeSignOut}}" style="min-height: 44px;">Cancel</x-import>
+          <a href="Welcome.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; box-sizing: border-box; border-radius: var(--radius-md); background: var(--color-primary); color: var(--color-on-primary); font-size: 15px; font-weight: 500;">Sign out</a>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+
+  <main style="flex: 1; width: 100%; max-width: 1280px; margin: 0 auto; padding: 64px 32px 96px; box-sizing: border-box;">
+    <div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 24px;">
+      <div>
+        <h1 class="t-display-md" style="margin: 0; font-size: clamp(32px, 5vw, 40px);">Your artists</h1>
+        <p class="t-body-lg" style="margin: 8px 0 0; color: var(--color-ink-subtle);">You follow <span class="t-mono" style="color: var(--color-ink);">{{count}}</span> artists. New albums from them show up first.</p>
+      </div>
+      <a href="Setup.dc.html" style="display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 18px; box-sizing: border-box; border-radius: var(--radius-md); background: var(--color-primary); color: var(--color-on-primary); font-size: 15px; font-weight: 500;">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M8 3v10M3 8h10"></path></svg>
+        Add artists
+      </a>
+    </div>
+
+    <!-- Followed artists -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; margin-top: 40px;">
+      <sc-for list="{{artists}}" as="a" hint-placeholder-count="6">
+        <article style="display: flex; flex-direction: column; border: 1px solid var(--color-hairline); border-radius: var(--radius-lg); background: var(--color-surface-1); overflow: hidden;">
+          <div style="position: relative; aspect-ratio: 1 / 1; display: flex; align-items: center; justify-content: center; background: var(--color-surface-3);">
+            <span style="font-family: var(--font-display); font-size: 48px; font-weight: 600; letter-spacing: -1.5px; color: var(--color-ink-subtle);">{{a.initials}}</span>
+            <span class="t-mono" style="position: absolute; left: 10px; top: 8px; font-size: 10px; color: var(--color-ink-subtle);">Artist photo</span>
+            <sc-if value="{{a.isNew}}" hint-placeholder-val="{{false}}">
+              <span style="position: absolute; right: 10px; top: 10px;">
+                <x-import component-from-global-scope="LinearMarketingDesignSystem_868804.Badge" tone="brand" dot="{{yes}}">New album</x-import>
+              </span>
+            </sc-if>
+          </div>
+          <div style="padding: 14px 16px 16px; display: flex; flex-direction: column; gap: 4px;">
+            <h2 class="t-card-title" style="margin: 0; font-size: 18px;">{{a.name}}</h2>
+            <span class="t-body-sm" style="color: var(--color-ink-subtle);">Latest: <span style="color: var(--color-ink-muted);">{{a.latest}}</span> · <span class="t-mono">{{a.year}}</span></span>
+            <div style="display: flex; gap: 8px; margin-top: 12px;">
+              <a href="#discography" style="flex: 1; display: inline-flex; align-items: center; justify-content: center; min-height: 40px; border-radius: var(--radius-md); border: 1px solid var(--color-hairline); background: var(--color-surface-2); color: var(--color-ink); font-size: 13px; font-weight: 500;">Discography</a>
+              <button type="button" onClick="{{a.unfollow}}" aria-label="{{a.unfollowLabel}}" style="min-height: 40px; padding: 0 12px; border-radius: var(--radius-md); border: 1px solid var(--color-hairline); background: transparent; color: var(--color-ink-subtle); font-family: var(--font-text); font-size: 13px; font-weight: 500; cursor: pointer;">Unfollow</button>
+            </div>
+          </div>
+        </article>
+      </sc-for>
+    </div>
+
+    <sc-if value="{{empty}}" hint-placeholder-val="{{false}}">
+      <div style="margin-top: 40px; text-align: center;">
+        <p class="t-body-lg" style="margin: 0; color: var(--color-ink-subtle);">You're not following anyone yet.</p>
+      </div>
+    </sc-if>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1100}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { removed: [] }; }
+  renderVals() {
+    const followed = [
+      { name: 'Kendrick Lamar', latest: 'To Pimp a Butterfly', year: '2015', isNew: true },
+      { name: 'Madvillain', latest: 'Madvillainy', year: '2004', isNew: true },
+      { name: 'JAY-Z', latest: 'The Blueprint', year: '2001', isNew: false },
+      { name: 'OutKast', latest: 'Aquemini', year: '1998', isNew: false },
+      { name: 'Nas', latest: 'Illmatic', year: '1994', isNew: false },
+      { name: 'A Tribe Called Quest', latest: 'The Low End Theory', year: '1991', isNew: false }
+    ];
+    const removed = this.state.removed;
+    const initials = (n) => n.replace(/[^A-Za-z ]/g, '').split(' ').filter(Boolean).map((w) => w[0]).slice(0, 2).join('').toUpperCase();
+    const list = followed.filter((a) => !removed.includes(a.name));
+    return {
+      yes: true,
+      userId: 'RT-7K2P-QX9M',
+      signOutOpen: !!this.state.signOut,
+      openSignOut: () => this.setState({ signOut: true, copied: false }),
+      closeSignOut: () => this.setState({ signOut: false }),
+      copyLabel: this.state.copied ? 'Copied' : 'Copy',
+      copyId: () => { try { navigator.clipboard.writeText('RT-7K2P-QX9M'); } catch (e) {} this.setState({ copied: true }); },
+      count: list.length,
+      empty: list.length === 0,
+      artists: list.map((a) => ({
+        ...a,
+        initials: initials(a.name),
+        unfollowLabel: `Unfollow ${a.name}`,
+        unfollow: () => this.setState({ removed: [...removed, a.name] })
+      }))
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -16,6 +16,7 @@
   let userId = $state('');
   let justCreated = $state(false);
   let error = $state('');
+  let loading = $state(false);
 
   function onCreate() {
     userId = generate();
@@ -29,15 +30,30 @@
     error = '';
   }
 
-  function onSubmit(e: SubmitEvent) {
+  async function onSubmit(e: SubmitEvent) {
     e.preventDefault();
     const trimmed = userId.trim();
     if (!trimmed) {
       error = 'Please enter or create a user ID.';
       return;
     }
-    localStorage.setItem(USER_ID_KEY, trimmed);
-    goto('/setup');
+    loading = true;
+    try {
+      const res = await fetch('/api/users', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: trimmed }),
+      });
+      const data = await res.json();
+      localStorage.setItem(USER_ID_KEY, trimmed);
+      goto(data.isNew ? '/setup' : '/releases');
+    } catch {
+      // Network error — store locally and continue as new user
+      localStorage.setItem(USER_ID_KEY, trimmed);
+      goto('/setup');
+    } finally {
+      loading = false;
+    }
   }
 </script>
 
@@ -86,12 +102,15 @@
 
           <button
             type="submit"
-            class="flex min-h-[44px] items-center justify-center gap-2 rounded-md bg-primary px-[18px] text-[15px] font-medium text-on-primary transition-colors hover:bg-primary-hover active:bg-primary-focus"
+            disabled={loading}
+            class="flex min-h-[44px] items-center justify-center gap-2 rounded-md bg-primary px-[18px] text-[15px] font-medium text-on-primary transition-colors hover:bg-primary-hover active:bg-primary-focus disabled:opacity-50"
           >
-            Continue
-            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M6 3l5 5-5 5" />
-            </svg>
+            {loading ? 'Signing in…' : 'Continue'}
+            {#if !loading}
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M6 3l5 5-5 5" />
+              </svg>
+            {/if}
           </button>
         </form>
 

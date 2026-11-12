@@ -55,7 +55,23 @@
       .toUpperCase();
   }
 
-  function finish() {
+  const USER_ID_KEY = 'rotation-user-id';
+  let saving = $state(false);
+
+  async function finish() {
+    saving = true;
+    const id = localStorage.getItem(USER_ID_KEY);
+    try {
+      if (id) {
+        await fetch(`/api/users/${encodeURIComponent(id)}/artists`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ artists: picked }),
+        });
+      }
+    } finally {
+      saving = false;
+    }
     localStorage.setItem(FOLLOWED_KEY, JSON.stringify(picked));
     goto('/artists');
   }
@@ -202,11 +218,13 @@
             Cancel
           </button>
         {/if}
-        <Button variant="primary" size="lg" disabled={!canSave} onclick={finish}>
-          Save artists
-          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M6 3l5 5-5 5" />
-          </svg>
+        <Button variant="primary" size="lg" disabled={!canSave || saving} onclick={finish}>
+          {saving ? 'Saving…' : 'Save artists'}
+          {#if !saving}
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M6 3l5 5-5 5" />
+            </svg>
+          {/if}
         </Button>
       </div>
     </div>

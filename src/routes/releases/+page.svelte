@@ -83,7 +83,7 @@
     {pad(selected)}
   </div>
 
-  <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+  <!-- svelte-ignore a11y_no_noninteractive_element_interactions a11y_no_noninteractive_tabindex -->
   <div
     class="relative flex-1"
     style="min-height: calc(var(--card) + 80px)"

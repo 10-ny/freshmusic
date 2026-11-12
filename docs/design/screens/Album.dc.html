@@ -23,19 +23,37 @@ a{color:#8a8f98;text-decoration:none}a:hover{color:#f7f8f8}
 <div style="min-height: 100vh; display: flex; flex-direction: column; background: var(--color-canvas); color: var(--color-ink); font-family: var(--font-text);">
 
   <!-- Header -->
-  <header style="display: flex; align-items: center; gap: 24px; padding: 20px 32px; border-bottom: 1px solid var(--color-hairline);">
+  <header style="display: flex; align-items: center; gap: 16px 32px; flex-wrap: wrap; padding: 20px 32px; border-bottom: 1px solid var(--color-hairline);">
     <a href="Main.dc.html" style="display: flex; align-items: center; gap: 10px; color: var(--color-ink);">
       <svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><rect width="22" height="22" rx="6" fill="#5e6ad2"></rect><circle cx="11" cy="11" r="6" fill="none" stroke="#ffffff" stroke-width="1.6"></circle><circle cx="11" cy="11" r="1.6" fill="#ffffff"></circle></svg>
-      <span style="font-size: 16px; font-weight: 600; letter-spacing: -0.3px;">Rotation</span>
+      <span style="font-size: 16px; font-weight: 600; letter-spacing: -0.3px;">FreshMusic</span>
     </a>
-    <a href="Main.dc.html" style="display: inline-flex; align-items: center; gap: 6px; font-size: 14px; min-height: 44px;">
-      <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3L5 8l5 5"></path></svg>
-      New releases
-    </a>
-    <div style="margin-left: auto;">
-      <x-import component-from-global-scope="LinearMarketingDesignSystem_868804.Button" variant="secondary" size="md" aria-label="Open menu" icon-left="{{menuIcon}}">Menu</x-import>
-    </div>
+    <nav aria-label="Main" style="flex: 1 1 auto; display: flex; justify-content: center; gap: 28px;">
+      <a href="Main.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 4px; font-size: 16px; font-weight: 500; letter-spacing: -0.2px; color: var(--color-ink-subtle);">New releases</a>
+      <a href="Artists.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 4px; font-size: 16px; font-weight: 500; letter-spacing: -0.2px; color: var(--color-ink-subtle);">Artists</a>
+    </nav>
+    <button type="button" onClick="{{openSignOut}}" aria-haspopup="dialog" style="min-height: 44px; padding: 0 4px; border: 0; background: transparent; cursor: pointer; font-family: var(--font-text); font-size: 16px; font-weight: 500; letter-spacing: -0.2px; color: var(--color-ink-subtle);">Sign out</button>
   </header>
+
+  <!-- Sign-out reminder -->
+  <sc-if value="{{signOutOpen}}" hint-placeholder-val="{{false}}">
+    <div style="position: fixed; inset: 0; z-index: 50; display: flex; align-items: center; justify-content: center; padding: 24px;">
+      <button type="button" aria-label="Cancel" onClick="{{closeSignOut}}" style="position: absolute; inset: 0; width: 100%; border: 0; padding: 0; background: rgba(0,0,0,0.7); cursor: pointer;"></button>
+      <div role="dialog" aria-modal="true" aria-labelledby="so-title" style="position: relative; width: 100%; max-width: 420px; box-sizing: border-box; padding: 28px; border: 1px solid var(--color-hairline-strong); border-radius: var(--radius-lg); background: var(--color-surface-1);">
+        <h2 id="so-title" class="t-headline" style="margin: 0; font-size: 24px;">Keep your user ID</h2>
+        <p class="t-body" style="margin: 8px 0 0; color: var(--color-ink-subtle);">There's no password. You'll need this ID to sign back in and see your artists, so save it somewhere safe before you go.</p>
+        <div style="display: flex; align-items: center; gap: 12px; margin-top: 20px; padding: 12px 12px 12px 16px; border: 1px solid var(--color-hairline); border-radius: var(--radius-md); background: var(--color-canvas);">
+          <span class="t-mono" style="flex: 1; font-size: 18px; letter-spacing: 0.5px; color: var(--color-ink);">{{userId}}</span>
+          <x-import component-from-global-scope="LinearMarketingDesignSystem_868804.Button" variant="secondary" size="sm" on-click="{{copyId}}" style="min-height: 36px;">{{copyLabel}}</x-import>
+        </div>
+        <div style="display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; margin-top: 24px;">
+          <x-import component-from-global-scope="LinearMarketingDesignSystem_868804.Button" variant="tertiary" size="lg" on-click="{{closeSignOut}}" style="min-height: 44px;">Cancel</x-import>
+          <a href="Welcome.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; box-sizing: border-box; border-radius: var(--radius-md); background: var(--color-primary); color: var(--color-on-primary); font-size: 15px; font-weight: 500;">Sign out</a>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
 
   <main style="flex: 1; max-width: 1280px; width: 100%; margin: 0 auto; padding: 64px 32px 96px; box-sizing: border-box; display: flex; flex-wrap: wrap; gap: 64px; align-items: flex-start;">
 
@@ -95,8 +113,13 @@ class Component extends DCLogic {
     const names = ["Wesley's Theory", 'For Free? (Interlude)', 'King Kunta', 'Institutionalized', 'These Walls', 'u', 'Alright', 'For Sale? (Interlude)', 'Momma', 'Hood Politics', 'How Much a Dollar Cost', 'Complexion (A Zulu Love)', 'The Blacker the Berry', "You Ain't Gotta Lie (Momma Said)", 'i', 'Mortal Man'];
     return {
       yes: true,
-      tracks: names.map((name, k) => ({ n: String(k + 1).padStart(2, '0'), name })),
-      menuIcon: React.createElement('svg', { width: 16, height: 16, viewBox: '0 0 16 16', fill: 'none', stroke: 'currentColor', strokeWidth: 1.5, strokeLinecap: 'round', 'aria-hidden': true }, React.createElement('path', { d: 'M2.5 5h11M2.5 11h11' }))
+      userId: 'RT-7K2P-QX9M',
+      signOutOpen: !!this.state.signOut,
+      openSignOut: () => this.setState({ signOut: true, copied: false }),
+      closeSignOut: () => this.setState({ signOut: false }),
+      copyLabel: this.state.copied ? 'Copied' : 'Copy',
+      copyId: () => { try { navigator.clipboard.writeText('RT-7K2P-QX9M'); } catch (e) {} this.setState({ copied: true }); },
+      tracks: names.map((name, k) => ({ n: String(k + 1).padStart(2, '0'), name }))
     };
   }
 }
