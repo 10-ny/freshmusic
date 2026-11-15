@@ -1,24 +1,40 @@
 import { json, error } from '@sveltejs/kit';
+import { hash } from 'bcryptjs';
 import { getDb } from '#lib/server/db';
-import { users } from '#lib/server/schema';
+import { users, sessions } from '#lib/server/schema';
 import { eq } from 'drizzle-orm';
 import type { RequestHandler } from './$types';
 
-export const POST: RequestHandler = async ({ request }) => {
-  const body = await request.json().catch(() => null);
-  const id = typeof body?.id === 'string' ? body.id.trim() : '';
+const SESSION_COOKIE = 'rotation-session';
+const SESSION_DAYS = 30;
 
-  if (!id) {
-    error(400, 'id is required');
-  }
+export const POST: RequestHandler = async ({ request, cookies }) => {
+	const body = await request.json().catch(() => null);
+	const username = typeof body?.username === 'string' ? body.username.trim() : '';
+	const password = typeof body?.password === 'string' ? body.password : '';
 
-  const db = getDb();
-  const existing = await db.select().from(users).where(eq(users.id, id)).limit(1);
+	if (!username) error(400, 'username is required');
+	if (!password)  error(400, 'password is required');
 
-  if (existing.length === 0) {
-    await db.insert(users).values({ id });
-    return json({ id, isNew: true });
-  }
+	const db = getDb();
+	const existing = await db.select({ id: users.id }).from(users).where(eq(users.username, username)).limit(1);
+	if (existing.length > 0) error(409, 'username already taken');
 
-  return json({ id, isNew: false });
+	const id = crypto.randomUUID();
+	const passwordHash = await hash(password, 12);
+	await db.insert(users).values({ id, username, passwordHash });
+
+	const sessionId = crypto.randomUUID();
+	const expiresAt = new Date(Date.now() + SESSION_DAYS * 86_400_000);
+	await db.insert(sessions).values({ id: sessionId, userId: id, expiresAt });
+
+	cookies.set(SESSION_COOKIE, sessionId, {
+		path: '/',
+		httpOnly: true,
+		sameSite: 'lax',
+		secure: true,
+		expires: expiresAt,
+	});
+
+	return json({ id, username, isNew: true });
 };

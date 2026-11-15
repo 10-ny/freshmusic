@@ -40,7 +40,7 @@
     {type}
     id={inputId}
     {placeholder}
-    {autocomplete}
+    autocomplete={autocomplete as HTMLInputElement['autocomplete']}
     {spellcheck}
     bind:value
     {oninput}

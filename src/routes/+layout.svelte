@@ -5,9 +5,7 @@
   import Button from '#lib/components/Button.svelte';
   import type { Snippet } from 'svelte';
 
-  const USER_ID_KEY = 'rotation-user-id';
-
-  let { children }: { children: Snippet } = $props();
+  let { children, data }: { children: Snippet; data: { userId: string | null } } = $props();
 
   const isWelcome = $derived(page.url.pathname === '/welcome');
   const isSetup = $derived(page.url.pathname === '/setup');
@@ -16,15 +14,6 @@
 
   let signOutOpen = $state(false);
   let copied = $state(false);
-  let userId = $state('');
-
-  $effect(() => {
-    const stored = localStorage.getItem(USER_ID_KEY);
-    if (!isWelcome && !isSetup && !stored) {
-      goto('/welcome');
-    }
-    userId = stored ?? '';
-  });
 
   function openSignOut() {
     signOutOpen = true;
@@ -35,15 +24,14 @@
     signOutOpen = false;
   }
 
-  function copyId() {
-    try { navigator.clipboard.writeText(userId); } catch {}
+  function copyUsername() {
+    try { navigator.clipboard.writeText(data.userId ?? ''); } catch {}
     copied = true;
   }
 
-  function confirmSignOut() {
+  async function confirmSignOut() {
     signOutOpen = false;
-    localStorage.removeItem(USER_ID_KEY);
-    localStorage.removeItem('rotation-followed-artists');
+    await fetch('/api/auth/signout', { method: 'POST' });
     goto('/welcome');
   }
 
@@ -123,17 +111,17 @@
         class="relative w-full max-w-[420px] border border-hairline-strong p-7 box-border"
         style="border-radius:var(--radius-lg);background:var(--color-surface-1)"
       >
-        <h2 id="so-title" class="t-headline m-0" style="font-size:24px">Keep your user ID</h2>
+        <h2 id="so-title" class="t-headline m-0" style="font-size:24px">Keep your username</h2>
         <p class="t-body m-0 mt-2 text-ink-subtle">
-          There's no password. You'll need this ID to sign back in and see your artists, so save it somewhere safe before you go.
+          You'll need your username and password to sign back in. Make sure you remember them before you go.
         </p>
 
         <div
           class="mt-5 flex items-center gap-3 border border-hairline px-4 py-3"
           style="border-radius:var(--radius-md);background:var(--color-canvas)"
         >
-          <span class="t-mono flex-1 text-ink" style="font-size:18px;letter-spacing:0.5px">{userId}</span>
-          <Button variant="secondary" size="sm" onclick={copyId}>
+          <span class="t-mono flex-1 text-ink" style="font-size:18px;letter-spacing:0.5px">{data.userId}</span>
+          <Button variant="secondary" size="sm" onclick={copyUsername}>
             {copied ? 'Copied' : 'Copy'}
           </Button>
         </div>

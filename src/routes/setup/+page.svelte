@@ -5,8 +5,6 @@
   import Input from '#lib/components/Input.svelte';
   import Avatar from '#lib/components/Avatar.svelte';
 
-  const FOLLOWED_KEY = 'rotation-followed-artists';
-
   const ALL_ARTISTS = [
     'Kendrick Lamar', 'Nas', 'JAY-Z', 'OutKast', 'A Tribe Called Quest',
     'MF DOOM', 'Madlib', 'J. Cole', 'Little Simz', 'Tyler, the Creator',
@@ -21,11 +19,10 @@
 
   $effect(() => {
     if (isAddMode) {
-      try {
-        picked = JSON.parse(localStorage.getItem(FOLLOWED_KEY) ?? '[]');
-      } catch {
-        picked = [];
-      }
+      fetch('/api/users/me/artists')
+        .then((r) => r.json())
+        .then((d) => { picked = d.artists ?? []; })
+        .catch(() => {});
     }
   });
 
@@ -55,24 +52,19 @@
       .toUpperCase();
   }
 
-  const USER_ID_KEY = 'rotation-user-id';
   let saving = $state(false);
 
   async function finish() {
     saving = true;
-    const id = localStorage.getItem(USER_ID_KEY);
     try {
-      if (id) {
-        await fetch(`/api/users/${encodeURIComponent(id)}/artists`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ artists: picked }),
-        });
-      }
+      await fetch('/api/users/me/artists', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ artists: picked }),
+      });
     } finally {
       saving = false;
     }
-    localStorage.setItem(FOLLOWED_KEY, JSON.stringify(picked));
     goto('/artists');
   }
 

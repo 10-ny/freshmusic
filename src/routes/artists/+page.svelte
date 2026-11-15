@@ -3,9 +3,6 @@
   import Badge from '#lib/components/Badge.svelte';
   import { albums } from '#lib/data/albums';
 
-  const USER_ID_KEY = 'rotation-user-id';
-  const FOLLOWED_KEY = 'rotation-followed-artists';
-
   function initials(name: string) {
     return name
       .replace(/[^A-Za-z ]/g, '')
@@ -21,30 +18,16 @@
   let loading = $state(true);
 
   $effect(() => {
-    const id = localStorage.getItem(USER_ID_KEY);
-    if (!id) { loading = false; return; }
-
-    fetch(`/api/users/${encodeURIComponent(id)}/artists`)
+    fetch('/api/users/me/artists')
       .then((r) => r.json())
-      .then((data) => {
-        followed = data.artists ?? [];
-        localStorage.setItem(FOLLOWED_KEY, JSON.stringify(followed));
-      })
-      .catch(() => {
-        try { followed = JSON.parse(localStorage.getItem(FOLLOWED_KEY) ?? '[]'); } catch {}
-      })
+      .then((data) => { followed = data.artists ?? []; })
+      .catch(() => {})
       .finally(() => { loading = false; });
   });
 
   async function unfollow(name: string) {
-    const id = localStorage.getItem(USER_ID_KEY);
     followed = followed.filter((a) => a !== name);
-    localStorage.setItem(FOLLOWED_KEY, JSON.stringify(followed));
-    if (id) {
-      await fetch(`/api/users/${encodeURIComponent(id)}/artists/${encodeURIComponent(name)}`, {
-        method: 'DELETE',
-      });
-    }
+    await fetch(`/api/users/me/artists/${encodeURIComponent(name)}`, { method: 'DELETE' });
   }
 
   const artistCards = $derived(
