@@ -1,5 +1,1 @@
-import { albums } from '#lib/data/albums';
-
-export function load() {
-  return { albums };
-}
+// data is loaded server-side in +page.server.ts

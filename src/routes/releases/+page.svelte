@@ -2,7 +2,13 @@
   import type { PageProps } from './$types';
   import Badge from '#lib/components/Badge.svelte';
   import Button from '#lib/components/Button.svelte';
-  import { formatDate } from '#lib/data/albums';
+
+  function formatDate(iso: string): string {
+    const [year, month, day] = iso.split('-').map(Number);
+    return new Date(year, month - 1, day).toLocaleDateString('en-GB', {
+      day: 'numeric', month: 'long', year: 'numeric',
+    });
+  }
 
   let { data }: PageProps = $props();
   const albums = $derived(data.albums);
@@ -70,6 +76,18 @@
   <title>New releases — FreshMusic</title>
 </svelte:head>
 
+{#if albums.length === 0}
+  <main class="flex flex-1 flex-col items-center justify-center gap-4 px-8 text-center">
+    <p class="t-body-lg m-0 text-ink-subtle">No releases yet.</p>
+    <a
+      href="/setup"
+      class="inline-flex items-center gap-2 px-[18px] text-[15px] font-medium text-on-primary"
+      style="min-height:44px;border-radius:var(--radius-md);background:var(--color-primary)"
+    >
+      Follow some artists
+    </a>
+  </main>
+{:else}
 <main
   style="--card: clamp(240px, 30vw, 440px)"
   class="relative flex flex-1 flex-col overflow-hidden"
@@ -115,9 +133,9 @@
           cursor: {s.isSelected ? 'default' : 'pointer'};
         "
       >
-        {#if album.cover}
+        {#if album.coverUrl}
           <img
-            src={album.cover}
+            src={album.coverUrl}
             alt=""
             class="block h-full w-full object-cover"
             aria-hidden="true"
@@ -158,9 +176,6 @@
       >
         <div class="flex min-w-0 flex-col gap-1">
           <span class="t-body-lg font-medium text-ink">{current.artist}</span>
-          <span class="t-body-sm text-ink-subtle">
-            Produced by <span class="text-ink-muted">{current.producer}</span>
-          </span>
         </div>
         <div class="flex flex-col items-end gap-1 text-right">
           <span class="t-eyebrow text-ink-subtle" style="font-size:11px">Released</span>
@@ -168,7 +183,7 @@
         </div>
       </div>
       <div class="mt-6">
-        <Button href="/album/{current.slug}" variant="primary" size="md">
+        <Button href="/album/{current.id}" variant="primary" size="md">
           View album
           <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M6 3l5 5-5 5" />
@@ -224,3 +239,4 @@
     </div>
   </div>
 </main>
+{/if}

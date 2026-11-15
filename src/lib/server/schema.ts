@@ -19,6 +19,7 @@ export const follows = pgTable(
   {
     userId:     text('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
     artistName: text('artist_name').notNull(),
+    spotifyId:  text('spotify_id'),
     followedAt: timestamp('followed_at').defaultNow().notNull(),
   },
   (t) => [primaryKey({ columns: [t.userId, t.artistName] })]
